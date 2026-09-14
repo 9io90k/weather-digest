@@ -1,0 +1,130 @@
+{
+  "info": {
+    "name": "Weather Digest API",
+    "description": "Запросы к Open-Meteo API: геокодинг и прогноз погоды с примерами ответов",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Geocoding - Search City",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{geocoding_url}}?name={{city}}&count=1&language=ru&format=json",
+          "host": ["{{geocoding_url}}"],
+          "query": [
+            { "key": "name", "value": "{{city}}" },
+            { "key": "count", "value": "1" },
+            { "key": "language", "value": "ru" },
+            { "key": "format", "value": "json" }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - City Found",
+          "originalRequest": {
+            "method": "GET",
+            "url": {
+              "raw": "{{geocoding_url}}?name=Москва&count=1&language=ru&format=json",
+              "host": ["{{geocoding_url}}"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": "{\n  \"results\": [\n    {\n      \"id\": 524901,\n      \"name\": \"Москва\",\n      \"latitude\": 55.75222,\n      \"longitude\": 37.61556,\n      \"country\": \"Россия\"\n    }\n  ]\n}"
+        },
+        {
+          "name": "200 OK - City Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "url": {
+              "raw": "{{geocoding_url}}?name=НесуществующийГород123&count=1&language=ru&format=json",
+              "host": ["{{geocoding_url}}"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": "{\n  \"generationtime_ms\": 0.15\n}"
+        }
+      ]
+    },
+    {
+      "name": "Forecast - Daily Weather",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{forecast_url}}?latitude={{lat}}&longitude={{lon}}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=3&timezone=auto",
+          "host": ["{{forecast_url}}"],
+          "query": [
+            { "key": "latitude", "value": "{{lat}}" },
+            { "key": "longitude", "value": "{{lon}}" },
+            { "key": "daily", "value": "temperature_2m_max,temperature_2m_min,precipitation_sum" },
+            { "key": "forecast_days", "value": "3" },
+            { "key": "timezone", "value": "auto" }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Forecast Success",
+          "originalRequest": {
+            "method": "GET",
+            "url": {
+              "raw": "{{forecast_url}}?latitude=55.7522&longitude=37.6156&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=3&timezone=auto",
+              "host": ["{{forecast_url}}"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": "{\n  \"latitude\": 55.7522,\n  \"longitude\": 37.6156,\n  \"daily\": {\n    \"time\": [\"2026-09-14\", \"2026-09-15\", \"2026-09-16\"],\n    \"temperature_2m_max\": [18.9, 18.3, 15.1],\n    \"temperature_2m_min\": [8.7, 10.9, 9.4],\n    \"precipitation_sum\": [0.0, 0.1, 2.4]\n  }\n}"
+        },
+        {
+          "name": "400 Bad Request - Invalid Coordinates",
+          "originalRequest": {
+            "method": "GET",
+            "url": {
+              "raw": "{{forecast_url}}?latitude=invalid&longitude=37.6156",
+              "host": ["{{forecast_url}}"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": "{\n  \"error\": true,\n  \"reason\": \"Cannot parse parameter latitude: invalid\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "geocoding_url",
+      "value": "https://geocoding-api.open-meteo.com/v1/search"
+    },
+    {
+      "key": "forecast_url",
+      "value": "https://api.open-meteo.com/v1/forecast"
+    },
+    {
+      "key": "city",
+      "value": "Москва"
+    },
+    {
+      "key": "lat",
+      "value": "55.7522"
+    },
+    {
+      "key": "lon",
+      "value": "37.6156"
+    }
+  ]
+}
