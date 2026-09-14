@@ -6,7 +6,7 @@ const REPORTS_DIR = process.env.REPORTS_DIR || 'reports';
 
 function getReportFilePath(cityName){
     const today = new Date().toISOString().split('T')[0];
-    const fileName = '${cityName.trim()}-${today}.json';
+    const fileName = `${cityName.trim()}-${today}.json`;
     return path.resolve(REPORTS_DIR, fileName);
 }
 

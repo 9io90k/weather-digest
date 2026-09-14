@@ -1,5 +1,5 @@
-const GEOGODING_BASE_URL = 'https://geocoding-api.open-meteo.com/v1/search';
-const FORECAST_BASE_URL = "https://api.open-meteo.com/v1/forecast"
+const GEOCODING_BASE_URL = process.env.GEOCODING_API_URL || 'https://geocoding-api.open-meteo.com/v1/search';
+const FORECAST_BASE_URL = process.env.FORECAST_API_URL || 'https://api.open-meteo.com/v1/forecast';
 const DEFAULT_TIMEOUT_MS = Number(process.env.TIMEOUT_MS) || 5000;
 
 //Сетевой запрос с контролем таймаута и обработкой статусов
@@ -44,7 +44,7 @@ async function fetchWithTimeout(url, timeoutMs = DEFAULT_TIMEOUT_MS) {
 
 //Парсинг координат
 export async function getCoordinatesByCity(cityName) {
-    const url = new URL(GEOGODING_BASE_URL);
+    const url = new URL(GEOCODING_BASE_URL);
     const params = new URLSearchParams({
         name: cityName.trim(),
         count: '1',
@@ -82,12 +82,12 @@ export async function getWeatherForecast(lat, lon, days = 3){
     const data = await fetchWithTimeout(url);
 
     if(!data.daily || !data.daily.time){
-        throw new Error('Получены неполный данные о прогнозе погоды');
+        throw new Error('Получены неполные данные о прогнозе погоды');
     }
 
     const forecast = data.daily.time.map((currentDate, index) => {
         return {
-            data: currentDate,
+            date: currentDate,
             tempMax: data.daily.temperature_2m_max[index],
             tempMin: data.daily.temperature_2m_min[index],
             precipitation: data.daily.precipitation_sum[index]
