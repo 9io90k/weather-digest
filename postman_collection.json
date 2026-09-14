@@ -1,0 +1,54 @@
+{
+  "info": {
+    "name": "Weather Digest API",
+    "description": "Запросы к Open-Meteo API: геокодинг и прогноз погоды",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Geocoding - Search City",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{geocoding_url}}?name=Москва&count=1&language=ru&format=json",
+          "host": ["{{geocoding_url}}"],
+          "query": [
+            { "key": "name", "value": "Москва" },
+            { "key": "count", "value": "1" },
+            { "key": "language", "value": "ru" },
+            { "key": "format", "value": "json" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Forecast - Daily Weather",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{forecast_url}}?latitude=55.7522&longitude=37.6156&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=3&timezone=auto",
+          "host": ["{{forecast_url}}"],
+          "query": [
+            { "key": "latitude", "value": "55.7522" },
+            { "key": "longitude", "value": "37.6156" },
+            { "key": "daily", "value": "temperature_2m_max,temperature_2m_min,precipitation_sum" },
+            { "key": "forecast_days", "value": "3" },
+            { "key": "timezone", "value": "auto" }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "geocoding_url",
+      "value": "https://geocoding-api.open-meteo.com/v1/search"
+    },
+    {
+      "key": "forecast_url",
+      "value": "https://api.open-meteo.com/v1/forecast"
+    }
+  ]
+}
